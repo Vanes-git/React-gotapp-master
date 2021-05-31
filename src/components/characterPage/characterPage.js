@@ -1,43 +1,51 @@
-import React, {Component} from 'react';
-import {Col, Row, Container} from 'reactstrap';
-import ItemList from '../itemList';
-import CharDetails from '../charDetails';
-import ErrorMessage from '../errorMessage';
+import React, { Component } from "react";
+import gotService from "../../services/gotServis";
+import ItemList from "../itemList";
+import CharDetails, {Field} from "../charDetails";
+import ErrorMessage from "../errorMessage";
+import RowBlock from '../rowBlock';
+
 
 export default class CharacterPage extends Component {
+    gotService = new gotService();
 
     state = {
         selectedChar: 130,
-        error: false
-    }
+        error: false,
+    };
 
-    onCharSelected = (id) => {
+    onItemSelected = (id) => {
         this.setState({
-            selectedChar: id
-        })
-    }
+            selectedChar: id,
+        });
+    };
 
     componentDidCatch() {
         this.setState({
-            error: true
-        })
+            error: true,
+        });
     }
 
     render() {
-
-        if(this.state.error) {
-            return <ErrorMessage/>
+        if (this.state.error) {
+            return <ErrorMessage />;
         }
 
-        return (
-            <Row>
-                <Col md='6'>
-                    <ItemList onCharSelected={this.onCharSelected}/>
-                </Col>
-                <Col md='6'>
-                    <CharDetails charId = {this.state.selectedChar} />
-                </Col>
-            </Row>
-        )
+        const itemList = (
+            <ItemList
+                onItemSelected={this.onItemSelected}
+                getData={this.gotService.getAllCharacters}
+                renderItem={({ name, gender }) => `${name} (${gender})`}
+            />
+        );
+
+        const charDetails = <CharDetails charId={this.state.selectedChar}>
+            <Field field="gender" label="Gender"/>
+            <Field field="born" label="Born"/>
+            <Field field="died" label="Died"/>
+            <Field field="culture" label="Culture"/>
+        </CharDetails>;
+
+        return <RowBlock left={itemList} right={charDetails} />;
     }
 }

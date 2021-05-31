@@ -7,57 +7,55 @@ export default class GotService {
         const res = await fetch(`${this._apiBase}${url}`);
 
         if (!res.ok) {
-            throw new Error(
-                `Could not fetch ${url} , received ${res.status}`
-            );
+            throw new Error(`Could not fetch ${url} , received ${res.status}`);
         }
         return await res.json();
     };
 
-    async getAllBooks() {
+    getAllBooks = async () => {
         const res = await this.getResource(`/books/`);
         return res.map(this._transformBook);
-    }
+    };
 
-    async getBook(id) {
+    getBook = async (id) => {
         const book = await this.getResource(`/books/${id}/`);
         return this._transformBook(book);
-    }
+    };
 
-    async getAllCharacters() {
+    getAllCharacters = async () => {
         const res = await this.getResource(`/characters?page=5&pageSize=10`);
         return res.map(this._transformCharacter);
-    }
+    };
 
-    async getCharacter(id) {
+    getCharacter = async (id) => {
         const character = await this.getResource(`/characters/${id}`);
         return this._transformCharacter(character);
-    }
+    };
 
-    async getAllHouses() {
+    getAllHouses = async () => {
         const res = await this.getResource(`/houses/`);
         return res.map(this._transformHouse);
-    }
+    };
 
-    async getHouse(id) {
+    getHouse = async (id) => {
         const house = await this.getResource(`/houses/${id}/`);
         return this._transformHouse(house);
-    }
+    };
 
     isSet(data) {
         if (data) {
-            return data
+            return data;
         } else {
-            return 'no data :('
+            return "no data :(";
         }
     }
 
     _extractId = (item) => {
         const idRegExp = /\/([0-9]*)$/;
         return item.url.match(idRegExp)[1];
-    }
+    };
 
-    _transformCharacter = (char)  => {
+    _transformCharacter = (char) => {
         return {
             id: this._extractId(char),
             name: this.isSet(char.name),
@@ -66,7 +64,7 @@ export default class GotService {
             died: this.isSet(char.died),
             culture: this.isSet(char.culture),
         };
-    }
+    };
 
     _transformHouse = (house) => {
         return {
@@ -76,9 +74,9 @@ export default class GotService {
             words: this.isSet(house.words),
             titles: this.isSet(house.titles),
             overlord: this.isSet(house.overlord),
-            ancestralWeapons: this.isSet(house.ancestralWeapons)
-        }
-    }
+            ancestralWeapons: this.isSet(house.ancestralWeapons),
+        };
+    };
 
     _transformBook = (book) => {
         return {
@@ -86,7 +84,7 @@ export default class GotService {
             name: this.isSet(book.name),
             numberOfPages: this.isSet(book.numberOfPages),
             publisher: this.isSet(book.publisher),
-            released: this.isSet(book.released)
-        }
-    }
+            released: this.isSet(book.released),
+        };
+    };
 }
