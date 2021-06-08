@@ -15,7 +15,7 @@ export default class RandomChar extends Component {
 
     componentDidMount() {        
         this.updateChar();
-        this.timerId = setInterval(this.updateChar, 7000);
+        this.timerId = setInterval(this.updateChar, this.props.interval);
     }
 
     componentWillUnmount() {
@@ -56,6 +56,10 @@ export default class RandomChar extends Component {
             </div>
         );
     }
+}
+
+RandomChar.defaultProps = {
+    interval: 15000
 }
 
 const View = ({ char }) => {
